@@ -106,5 +106,5 @@
         <variable name="UPDATE_API" value="https://api.ionicjs.com" />
         <variable name="MIN_BACKGROUND_DURATION" value="30" />
     </plugin>
-    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
+    <!-- <plugin name="cordova-plugin-firebase" spec="2.0.5" /> -->
 </widget>
