@@ -93,12 +93,12 @@
       "cordova-plugin-file": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-ionic": {
-        "APP_ID": "6890daa9",
+        "APP_ID": "--app-id=\"d2668b42\" \\",
         "CHANNEL_NAME": "Master",
         "UPDATE_METHOD": "background",
-        "MAX_STORE": "3",
-        "UPDATE_API": "https://api.ionicjs.com",
-        "MIN_BACKGROUND_DURATION": "30"
+        "MAX_STORE": "2",
+        "MIN_BACKGROUND_DURATION": "30",
+        "UPDATE_API": "https://api.ionicjs.com"
       },
       "cordova-plugin-firebase": {}
     }
