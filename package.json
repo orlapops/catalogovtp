@@ -34,6 +34,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "angular-animations": "0.0.10",
     "cordova-android": "^8.0.0",
+    "cordova-res": "^0.6.0",
     "core-js": "^2.6.5",
     "firebase": "^6.4.0",
     "rxjs": "~6.5.1",
