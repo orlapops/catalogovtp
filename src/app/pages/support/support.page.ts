@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-support',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SupportPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
   }
