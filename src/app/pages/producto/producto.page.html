@@ -27,9 +27,15 @@
                 <strong>{{producto.linea}}  {{producto.color}}</strong>
             </h4>
         </ion-row> -->
-        <img *ngIf="producto.link_img" [src]="_DomSanitizer.bypassSecurityTrustUrl(producto.link_img)" />
+        <img *ngIf="producto.link_img" [src]="_DomSanitizer.bypassSecurityTrustUrl(producto.link_img)"  tappable (click)="openPreview(producto.link_img)"/>
         <img *ngIf="!producto.link_img" src="assets/img/imagennodisponible.jpg" />
 
+        <!-- <ion-slides [options]="sliderOpts">
+            <ion-slide >
+                <img *ngIf="producto.link_img" [src]="_DomSanitizer.bypassSecurityTrustUrl(producto.link_img)"  tappable (click)="openPreview(producto.link_img)"/>
+                <img *ngIf="!producto.link_img" src="assets/img/imagennodisponible.jpg" />
+                    </ion-slide>
+          </ion-slides> -->
 
         <ion-grid>
             <ion-row justify-item-center>

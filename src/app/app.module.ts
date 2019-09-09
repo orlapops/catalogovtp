@@ -22,7 +22,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { TranslateProvider } from './providers';
 
 // Modal Pages
-import { ImagePageModule } from './pages/modal/image/image.module';
 import { LocationPageModule } from './pages/modal/location/location.module';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -34,6 +33,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ProductosService } from './providers/productos.service';
 // import { Network } from '@ionic-native/network';
 
+import { ImagePageModule } from './pages/image/image.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
