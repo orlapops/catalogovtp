@@ -96,9 +96,9 @@ export class RegisterPage implements OnInit {
     });
   }
 
-  async agregarUsuario(Empresa: string, Nombre: string, ID: number, Email: string, Vista: boolean = false, Pedido: boolean = false, Protocolo: string = '', Version: string = '', Admin: boolean = false): Promise<any> {
+  async agregarUsuario(Empresa: string, Nombre: string, ID: number, Email: string, Vista: boolean = false, Pedido: boolean = false, Protocolo: string = '', Version: string = '', Admin: boolean = false, ver_basicas: boolean = false, ver_stock: boolean = false): Promise<any> {
     console.log('registrando datos');
-    this.registro={ Empresa: Empresa, Nombre: Nombre, ID: ID, Email: Email, Vista: Vista, Pedido: Pedido, Protocolo: Protocolo, Version: Version, Admin: Admin}
+    this.registro={ Empresa: Empresa, Nombre: Nombre, ID: ID, Email: Email, Vista: Vista, Pedido: Pedido, Protocolo: Protocolo, Version: Version, Admin: Admin,ver_basicas: ver_basicas,ver_stock: ver_stock}
     return this.usuarios.doc(Email).set({
       Empresa,
       Nombre,
@@ -108,7 +108,9 @@ export class RegisterPage implements OnInit {
       Pedido,
       Protocolo,
       Version,
-      Admin
+      Admin,
+      ver_basicas,
+      ver_stock
     });
   }
   // // //

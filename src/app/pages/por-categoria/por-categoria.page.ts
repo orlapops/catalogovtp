@@ -14,6 +14,7 @@ export class PorCategoriaPage implements OnInit {
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
   categoria = null;
+  subtipo = null;
   param_subcat: any;
   subcategoria: any;
   pagina = 0;
@@ -24,13 +25,28 @@ export class PorCategoriaPage implements OnInit {
 
   ngOnInit() {
     this.pagina=1;
-    this.categoria=this.activatedRoute.snapshot.paramMap.get('id');
+    // this.categoria=this.activatedRoute.snapshot.paramMap.get('id');
+    console.log('llega this.categoria',this.categoria);
+    this.activatedRoute.params.subscribe(data => {
+        console.log("Parametros que vienen de por-categoria data: ",data);
+        this.categoria = data.cod_catalogo;
+        this.subtipo = data.sub_tipo;
+
+    })
+
+
+
     this._ps.get_catalogo(this.categoria).subscribe((datos: any) => {
-        this._ps.catalogo_act = datos.nombre;
+      // console.log('datos cget_catalogo',datos);
+      this._ps.catalogo_act = datos.nombre;
+      this._ps.get_subtipo(this.categoria+this.subtipo).subscribe((datossub: any) => {
+        // console.log('datos cget_catalogo',datossub);
+          this._ps.catalogo_act += ' - '+ datossub.nombre;
+      });
     });
     console.log("Parametros que vienen de categoria");
     console.log("cod_catalogo:",this.categoria)
-    this.param_subcat=this._ps.pedir_subcategoria(this.categoria);
+    this.param_subcat=this._ps.pedir_subcategoria(this.categoria,this.subtipo);
   }
 
   loadData(event)

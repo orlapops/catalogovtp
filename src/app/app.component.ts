@@ -84,7 +84,7 @@ export class AppComponent  implements OnInit  {
       this.translateService.getTranslation(environment.language).subscribe(translations => {
         this.translate.setTranslations(translations);
       });
-      // this._parEmpreProv.URL_SERVICIOS = "http://190.85.93.218/VIATROPICAL/";
+      // this._parEmpreProv.URL_SERVICIOS = "http://190.165.176.69/VIATROPICAL/";
       this._parEmpreProv.cargarUsuarioStorage().then( existe => {  
         if ( existe ) {
           //Debe suscribirse al usuario en firebase
@@ -130,11 +130,13 @@ export class AppComponent  implements OnInit  {
   
   actualizar_bdfirebase(){
     // this._ps.subir_catalogosafb();
+    this._ps.subir_subtiposafb();
     // this._ps.subir_lineasafb();
     // this._ps.subir_coloresafb();
     // this._ps.subir_curvasLineaafb();
     //this._ps.subir_curvasafb();
-     this._ps.subir_referenciasafb();
+    //  this._ps.subir_referenciasafb();
+
   }
   actualizar_imagenlineasfirebase(){
     this._ps.actualizar_linkimagenfb_lineas();

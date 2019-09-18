@@ -79,8 +79,8 @@ export class TallaPage implements OnInit {
         this.producto.tallas.push(obj);
       }
       this.total_t += Number(parseInt(t.cantidad, 10));
-      console.log("Total tallas:");
-      console.log(this.total_t);
+      // console.log("Total tallas:");
+      // console.log(this.total_t);
     });
     this.producto.t_tallas=this.total_t;
     this.producto.t_pares=this.total_t;

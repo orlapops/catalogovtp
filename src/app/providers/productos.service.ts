@@ -29,6 +29,7 @@ export class ProductosService {
   productos_todos_fb: any[]=[];
 
   categoria:any[]=[];
+  subtipos:any[]=[];
   subcategoria:any[]=[];
   producto:any[]=[];
 
@@ -78,10 +79,11 @@ export class ProductosService {
     if (this.seleccion_fb===true ){ //CARGAR LINEAS DE FIREBASE JM 12/10/2018
        
       console.log ("ESTA EN FIREBASE: cargar_lineas() ")
-      this.fbDb.collection('catalogos').valueChanges()
-      .subscribe((data_categoria) => 
-      {
-        
+      // this.fbDb.collection('catalogos').valueChanges()
+      this.fbDb.collection('catalogos', cod => 
+        cod.where('vigente','==', true)).valueChanges()
+        .subscribe((data_categoria) => 
+      {        
         console.log("DATA CATEGORIA FIREBASE", data_categoria)
         this.categoria=data_categoria;
         console.log("Catalogos en Fb",this.categoria)
@@ -144,13 +146,16 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
   {
     if (this.seleccion_fb===true){  //CARGAR PRODUCTOS DE FIREBASE JM 12/10/2018
       console.log ("ESTA EN FIREBASE:  cargar_todos () ")
+      // this.fbDb.collection('catalogos').valueChanges()
       
       let promesa=new Promise((resolve,reject)=>{
-        this.fbDb.collection('catalogos').valueChanges()
+        this.fbDb.collection('catalogos', cod => 
+            cod.where('vigente','==', true))                        
+            .valueChanges()        
           .subscribe((data_producto) => 
           {
             
-            // console.log("DATA PRODUCTO FIREBASE", data_producto)
+            console.log("DATA PRODUCTO FIREBASE carga todos", data_producto)
             let nuevaData = this.agrupar(data_producto, 2 );
             // console.log("NUEVA DATA", nuevaData)
 
@@ -201,33 +206,65 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
   
   }
 
-//Traer un catalogo de fb
+//Traer un catalogo de fb 
   public get_catalogo(id){
       return this.fbDb
       .collection(`/catalogos`)
       .doc(id).valueChanges();
   }
+  public get_subtipo(id){
+    return this.fbDb
+    .collection(`/subtipos`)
+    .doc(id).valueChanges();
+}
 
+    //Cargar subtipos de un catalogo solo fb
+    cargar_subtipos(categoria:string){
+    
+        console.log ("ESTA EN FIREBASE: cargar subtipo()")
+        console.log ("Cod_catalogo Recibido:",categoria)
+        this.fbDb.collection(
+          'subtipos', cod => 
+                          cod.where('cod_catalogo','==', categoria)).valueChanges()
+                          .subscribe((data_subtipos) => 
+                          {
+                            console.log('llega de cargasr subtipos data_subtipos:',data_subtipos);
+                            //console.log("DATA CATEGORIA FIREBASE", data)
+                            this.subtipos=data_subtipos;
+                            console.log("Linea en Firebase subtipos",this.subtipos);
+                          },
+                  
+                          (err)=>{ console.log("Error en el data de Fb", err) }
+                          );
+    }
+  
   //Cargar Lineas de Viatropical
-  pedir_subcategoria(categoria:string){
+  pedir_subcategoria(categoria:string,subtipo:string){
     
     if (this.seleccion_fb===true) //PEDIR SUBCATEGORIA EN FIREBASE JM 11/10/2018
     {
-      console.log ("ESTA EN FIREBASE: pedir_subcategoria()")
-      console.log ("Cod_catalogo Recibido:",categoria)
-      this.fbDb.collection(
-        'armacatl', cod => 
-                        cod.where('cod_catalogo','==', categoria)).valueChanges()
-                        .subscribe((data_subcategoria) => 
-                        {
-                          
-                          //console.log("DATA CATEGORIA FIREBASE", data)
-                          this.subcategoria=data_subcategoria;
-                          console.log("Linea en Firebase",this.subcategoria);
-                        },
-                
-                        (err)=>{ console.log("Error en el data de Fb", err) }
-                        );
+      console.log ("ESTA EN FIREBASE: pedir_subcategoria()");
+      console.log ("Cod_catalogo Recibido:",categoria,this._parEmpreProv);
+      this.fbDb.collection('armacatl', cod => 
+          cod.where('cod_catalogo','==', categoria).where('sub_tipo','==',subtipo))                        
+          .valueChanges()
+            .subscribe((data_subcategoria) => 
+            {                          
+              console.log("DATA CATEGORIA FIREBASE", data_subcategoria)
+              // this.subcategoria=data_subcategoria;
+              this.subcategoria=[];
+              data_subcategoria.forEach((registro: any) => {
+                //EVALUAR DE ACUERDO A CONDICIONES TIPO                
+                if((this._parEmpreProv.usuario.ver_basicas && registro.tipo == 'BAS') ||
+                (this._parEmpreProv.usuario.ver_stock && registro.tipo == 'STOC')){
+                  // console.log('Asignar registro',registro);
+                  this.subcategoria.push(registro);
+                }                
+              });
+              console.log("Linea en Firebase",this.subcategoria);
+            },                
+          (err)=>{ console.log("Error en el data de Fb", err) }
+        );
       }
       else //PEDIR SUBCATEGORIA EN NETSOLIN JM 11/10/2018
       {
@@ -320,7 +357,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
   //Trae catalogos de tabla en NEtsolin y los pasa a firebase
   subir_catalogosafb(){
     let url= this._parEmpreProv.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=INVASCATRETCATALOGS"
-    console.log('Entro a subir_catalogosafb url:', url);
+    console.log('Entro a subir_catalogosafb url:',this._parEmpreProv.URL_SERVICIOS,url);
     this.http.post( url, NetsolinApp.objenvrest )
     .map (resp=> resp.json())
     .subscribe(data=>
@@ -340,6 +377,35 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
           },
           err => {
             this.fbDb.collection('catalogos').doc(itemcat.cod_catalogo).set(itemcat);                
+          });
+        });
+  
+      }
+    });    
+  }
+  //Trae catalogos de tabla en NEtsolin y los pasa a firebase
+  subir_subtiposafb(){
+    let url= this._parEmpreProv.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=INVASCATRETSUBTIPO"
+    console.log('Entro a subir_subtiposafb url:', url);
+    this.http.post( url, NetsolinApp.objenvrest )
+    .map (resp=> resp.json())
+    .subscribe(data=>
+    {             
+      console.log('Datos traer subir_subtiposafb data:', data);
+      if (data.error){
+        console.log('data.error', data.error);
+      }else{
+        //reccorrer y grabar en fb
+        data.catalogos.forEach((itemcat) => {
+          let larchivo = '/imagenes/' + itemcat.ima_boton.trim();
+          const ref = this.afStorage.ref(larchivo);
+          console.log('subir_subtiposafb: itemcat;',itemcat, itemcat.cod_catalogo);
+          ref.getDownloadURL().subscribe((url: any) =>  {
+            itemcat.link_img = url;
+            this.fbDb.collection('subtipos').doc(itemcat.cod_catalogo+itemcat.cod_subtipo).set(itemcat);                
+          },
+          err => {
+            this.fbDb.collection('subtipos').doc(itemcat.cod_catalogo+itemcat.cod_subtipo).set(itemcat);                
           });
         });
   

@@ -28,10 +28,11 @@
     <div text-center *ngIf="_ps.categoria.length === 0" class="lista_vacia">
         <br> Upsss. No hay nada por aqui
     </div>
-    <ion-card detail *ngFor="let item of _ps.categoria.slice(0,10*pagina)" [routerLink]="['/por-categoria',item.cod_catalogo]">
+    <!-- <ion-card detail *ngFor="let item of _ps.categoria.slice(0,10*pagina)" [routerLink]="['/por-categoria',item.cod_catalogo]"> -->
+    <ion-card detail *ngFor="let item of _ps.categoria.slice(0,10*pagina)" [routerLink]="['/por-subtipo',item.cod_catalogo]">
         <img *ngIf="item.link_img" [src]="_DomSanitizer.bypassSecurityTrustUrl(item.link_img)" />
         <img *ngIf="!item.link_img" src="assets/img/imagennodisponible.jpg" />
-        <div class="card-title" color="light">{{item.nombre}}</div>
+        <!-- <div class="card-title" color="light">{{item.nombre}}</div> -->
     </ion-card>
 
     <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
