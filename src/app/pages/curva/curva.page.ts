@@ -35,7 +35,7 @@ export class CurvaPage implements OnInit {
       this.producto.t_pares = 0;
       this.producto.curvas = [];
       this.producto.tallas = [];
-      console.log("producto creado",this.producto);
+      console.log("curva ",this.producto,this._parEmpreProv);
       this._ps.ver_tabla_curva();
     })
   }

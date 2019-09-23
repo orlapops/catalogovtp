@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -61,21 +61,16 @@ export class AppComponent  implements OnInit  {
         icon: 'help-buoy'
       }
     ];
-
+    console.log('En constructor app.componet');
     this.initializeApp();
   }
   ngOnInit() {
-  
-    this._ps.cargar_lineas().then( cargo => {
-      this.categoria=this._ps.categoria;   
-      if(cargo) {
-        this.cargo_lineas = true;
-      } else {
-        this.cargo_lineas = false;
-      }
-    });
+    console.log('En ngOnInit app.componet');
+
+
   }
   initializeApp() {
+    console.log('En initializeApp app.componet 1');
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
@@ -87,6 +82,7 @@ export class AppComponent  implements OnInit  {
       // this._parEmpreProv.URL_SERVICIOS = "http://190.165.176.69/VIATROPICAL/";
       this._parEmpreProv.cargarUsuarioStorage().then( existe => {  
         if ( existe ) {
+          console.log('En initializeApp app.componet 2 cargo usuario');
           //Debe suscribirse al usuario en firebase
           console.log('Cargo usuario existe',this._parEmpreProv.usuario);
            this._parEmpreProv.getUsuarFB(this._parEmpreProv.usuario.Email)
@@ -95,8 +91,16 @@ export class AppComponent  implements OnInit  {
                 if (datos) {
                     this._parEmpreProv.usuario_valido = true;
                     this._parEmpreProv.usuario = datos;
-                    this._parEmpreProv.permite_pedido = this._parEmpreProv.usuario.Pedido;
+                    this._parEmpreProv.permite_pedido = datos.Pedido;
                     this._parEmpreProv.guardarUsuarioStorage(datos);
+                    this._ps.cargar_lineas().then( cargo => {
+                      this.categoria=this._ps.categoria;   
+                      if(cargo) {
+                        this.cargo_lineas = true;
+                      } else {
+                        this.cargo_lineas = false;
+                      }
+                    });
                     console.log('Usuario: ',this._parEmpreProv.usuario);
                      //Verificar si ya esta autorizado por Via tropical Vista true
                      if (this._parEmpreProv.usuario.vista)

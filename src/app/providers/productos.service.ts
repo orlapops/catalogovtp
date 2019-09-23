@@ -61,9 +61,9 @@ export class ProductosService {
     public _DomSanitizer: DomSanitizer,
     private fbDb: AngularFirestore, private menuCtrl: MenuController,) 
   {
-    this.cargar_todos(); //Caragar todos los productos
-    this.cargar_lineas();//Cargar las categorias
-    this.obtenerImagenFB();  
+    // this.cargar_todos(); //Caragar todos los productos
+    // this.cargar_lineas();//Cargar las categorias
+    // this.obtenerImagenFB();  
   }
 
 
@@ -78,10 +78,10 @@ export class ProductosService {
     
     if (this.seleccion_fb===true ){ //CARGAR LINEAS DE FIREBASE JM 12/10/2018
        
-      console.log ("ESTA EN FIREBASE: cargar_lineas() ")
+      console.log ("ESTA EN FIREBASE: cargar_lineas() version: ",this._parEmpreProv.usuario.Version);
       // this.fbDb.collection('catalogos').valueChanges()
       this.fbDb.collection('catalogos', cod => 
-        cod.where('vigente','==', true)).valueChanges()
+        cod.where('vigente','==', true).where('version','==', this._parEmpreProv.usuario.Version)).valueChanges()
         .subscribe((data_categoria) => 
       {        
         console.log("DATA CATEGORIA FIREBASE", data_categoria)
@@ -145,12 +145,12 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
   cargar_todos ()
   {
     if (this.seleccion_fb===true){  //CARGAR PRODUCTOS DE FIREBASE JM 12/10/2018
-      console.log ("ESTA EN FIREBASE:  cargar_todos () ")
+      console.log ("ESTA EN FIREBASE:  cargar_todos () version usuario:",this._parEmpreProv.usuario.Version)
       // this.fbDb.collection('catalogos').valueChanges()
       
       let promesa=new Promise((resolve,reject)=>{
         this.fbDb.collection('catalogos', cod => 
-            cod.where('vigente','==', true))                        
+            cod.where('vigente','==', true).where('version','==', this._parEmpreProv.usuario.Version))                        
             .valueChanges()        
           .subscribe((data_producto) => 
           {
@@ -246,7 +246,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       console.log ("ESTA EN FIREBASE: pedir_subcategoria()");
       console.log ("Cod_catalogo Recibido:",categoria,this._parEmpreProv);
       this.fbDb.collection('armacatl', cod => 
-          cod.where('cod_catalogo','==', categoria).where('sub_tipo','==',subtipo))                        
+          cod.where('cod_catalogo','==', categoria).where('sub_tipo','==',subtipo).where('version','==', this._parEmpreProv.usuario.Version))                        
           .valueChanges()
             .subscribe((data_subcategoria) => 
             {                          
@@ -313,6 +313,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
                        cod.where('cod_catalogo', '==', cod_catalogo)
                           .where('linea', '==', linea)
                           .where('tipo', '==', tipo)
+                          .where('version','==', this._parEmpreProv.usuario.Version)
                           .where('sub_tipo', '==', sub_tipo))
                           .valueChanges()
                           .subscribe((data_producto) => 
@@ -615,6 +616,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
                        cod.where('cod_catalogo', '==', cod_catalogo)
                           .where('linea', '==', linea)
                           .where('tipo', '==', tipo)
+                          .where('version','==', this._parEmpreProv.usuario.Version)
                           .where('sub_tipo', '==', sub_tipo))
                           .valueChanges()
                           .subscribe((data_curva) => 
@@ -670,7 +672,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       console.log ("Parametros recibidos",color)
       this.fbDb.collection(
         'armacatlcol', cod => 
-                       cod.where('color', '==', color))
+                       cod.where('color', '==', color).where('version','==', this._parEmpreProv.usuario.Version))
                           .valueChanges()
                           .subscribe((data_imagen) => 
                             {

@@ -123,6 +123,7 @@ export class LoginPage implements OnInit {
                             if (datos) {
                               this._parEmpreProv.usuario_valido = true;
                               this._parEmpreProv.usuario = datos;
+                              this._parEmpreProv.permite_pedido = datos.Pedido;
                               this._parEmpreProv.guardarUsuarioStorage(datos);
                               console.log(this._parEmpreProv.usuario);
                               //Verificar si ya esta autorizado por Via tropical Vista true

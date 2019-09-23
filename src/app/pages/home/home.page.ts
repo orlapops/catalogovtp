@@ -55,7 +55,10 @@ export class HomePage implements OnInit {
   ) {
     platform.ready().then(() => {
       console.log("En constructor home usuario: ");
-
+      this._ps.cargar_todos(); //Caragar todos los productos
+      this._ps.cargar_lineas();//Cargar las categorias
+      this._ps.obtenerImagenFB();  
+  
     });
   }
 
