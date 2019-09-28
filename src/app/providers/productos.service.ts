@@ -81,7 +81,7 @@ export class ProductosService {
       console.log ("ESTA EN FIREBASE: cargar_lineas() version: ",this._parEmpreProv.usuario.Version);
       // this.fbDb.collection('catalogos').valueChanges()
       this.fbDb.collection('catalogos', cod => 
-        cod.where('vigente','==', true).where('version','==', this._parEmpreProv.usuario.Version)).valueChanges()
+        cod.where('version','==', this._parEmpreProv.usuario.Version)).valueChanges()
         .subscribe((data_categoria) => 
       {        
         console.log("DATA CATEGORIA FIREBASE", data_categoria)
@@ -150,7 +150,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       
       let promesa=new Promise((resolve,reject)=>{
         this.fbDb.collection('catalogos', cod => 
-            cod.where('vigente','==', true).where('version','==', this._parEmpreProv.usuario.Version))                        
+            cod.where('version','==', this._parEmpreProv.usuario.Version))                        
             .valueChanges()        
           .subscribe((data_producto) => 
           {

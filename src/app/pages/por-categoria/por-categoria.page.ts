@@ -3,6 +3,7 @@ import {ActivatedRoute,Router} from '@angular/router';
 import { ProductosService } from '../../providers/productos.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IonInfiniteScroll } from "@ionic/angular";
+import { ParEmpreService } from '../../providers/par-empre.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class PorCategoriaPage implements OnInit {
   pagina = 0;
   constructor( public _ps: ProductosService,
                public router: Router,
+               public _parEmpreProv: ParEmpreService,
                public _DomSanitizer: DomSanitizer,
                public activatedRoute: ActivatedRoute,) { }
 
@@ -33,11 +35,8 @@ export class PorCategoriaPage implements OnInit {
         this.subtipo = data.sub_tipo;
 
     })
-
-
-
-    this._ps.get_catalogo(this.categoria).subscribe((datos: any) => {
-      // console.log('datos cget_catalogo',datos);
+    this._ps.get_catalogo(this.categoria.trim()+this._parEmpreProv.usuario.Version.trim()).subscribe((datos: any) => {
+      console.log('datos cget_catalogo datos,this.categoria,this.subtipo',datos,this.categoria,this.subtipo);
       this._ps.catalogo_act = datos.nombre;
       this._ps.get_subtipo(this.categoria+this.subtipo).subscribe((datossub: any) => {
         // console.log('datos cget_catalogo',datossub);

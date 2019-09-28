@@ -26,11 +26,12 @@ export class PorSubtipoPage implements OnInit {
     this.pagina=1;
     this.subtipo=this.activatedRoute.snapshot.paramMap.get('id');
     this._ps.get_catalogo(this.subtipo).subscribe((datos: any) => {
+        console.log('get_catalogo datos:',datos);
         this._ps.catalogo_act = datos.nombre;
-    });
-    console.log("Parametros que vienen de subtipo");
-    console.log("cod_catalogo:",this.subtipo)
-    this.param_subcat=this._ps.cargar_subtipos(this.subtipo);
+        console.log("Parametros que vienen de subtipo");
+        console.log("cod_catalogo:",this.subtipo,datos.cod_catalogo)
+        this.param_subcat=this._ps.cargar_subtipos(datos.cod_catalogo);
+        });
   }
 
   loadData(event)
