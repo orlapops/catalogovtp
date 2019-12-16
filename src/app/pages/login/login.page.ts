@@ -31,6 +31,7 @@ export class LoginPage implements OnInit {
   }
   //analizado
   ngOnInit() {
+    console.log('init login');
     // document.querySelector('video').play();
    this.onLoginForm = this.formBuilder.group({
       'email': [null, Validators.compose([

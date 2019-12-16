@@ -54,4 +54,9 @@ export class PorCategoriaPage implements OnInit {
       console.log('crecioPagina');
       event.target.complete();
   }
+  Actlinkimagen(pcod_catalogo,plinea,pversion)
+  {
+    this._ps.actualizar_linkimagenfb_unalinea(pcod_catalogo,plinea,pversion);
+    console.log('Actualizar link imagenpcod_catalogo,plinea,ptipo,psub_tipo: ',pcod_catalogo,plinea,pversion)
+  }
 }

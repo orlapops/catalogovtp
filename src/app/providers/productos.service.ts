@@ -80,13 +80,14 @@ export class ProductosService {
        
       console.log ("ESTA EN FIREBASE: cargar_lineas() version: ",this._parEmpreProv.usuario.Version);
       // this.fbDb.collection('catalogos').valueChanges()
-      this.fbDb.collection('catalogos', cod => 
+      var suscatalogo = this.fbDb.collection('catalogos', cod => 
         cod.where('version','==', this._parEmpreProv.usuario.Version)).valueChanges()
         .subscribe((data_categoria) => 
       {        
         console.log("DATA CATEGORIA FIREBASE", data_categoria)
         this.categoria=data_categoria;
         console.log("Catalogos en Fb",this.categoria)
+        suscatalogo.unsubscribe();
         resolve(true);
       },
 
@@ -369,7 +370,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       }else{
         //reccorrer y grabar en fb
         data.catalogos.forEach((itemcat) => {
-          let larchivo = '/imagenes/' + itemcat.ima_boton.trim();
+          let larchivo = '/img_catalogos/' + itemcat.ima_boton.trim();
           const ref = this.afStorage.ref(larchivo);
           console.log('subir_catalogos: ', itemcat.cod_catalogo);
           ref.getDownloadURL().subscribe((url: any) =>  {
@@ -398,7 +399,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       }else{
         //reccorrer y grabar en fb
         data.catalogos.forEach((itemcat) => {
-          let larchivo = '/imagenes/' + itemcat.ima_boton.trim();
+          let larchivo = '/img_subtipos/' + itemcat.ima_boton.trim();
           const ref = this.afStorage.ref(larchivo);
           console.log('subir_subtiposafb: itemcat;',itemcat, itemcat.cod_catalogo);
           ref.getDownloadURL().subscribe((url: any) =>  {
@@ -427,7 +428,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       }else{
         //reccorrer y grabar en fb
         data.datos.forEach(itemcat => {
-          let larchivo = '/imagenes/' + itemcat.linea.trim()+'.jpg';
+          let larchivo = '/img_lineas/'+ itemcat.linea.trim() +'/' + itemcat.linea.trim()+'.jpg';
           const ref = this.afStorage.ref(larchivo);
           console.log('subir_linea: ', itemcat.linea);
           ref.getDownloadURL().subscribe((url: any) =>  {
@@ -452,7 +453,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
             data.forEach((itemcat: any) => {
               //solo las que no tienen imagen por velocidad
               if (itemcat.link_img ===''){
-              let larchivo = '/imagenes/' + itemcat.linea.trim() + '.jpg';
+              let larchivo = '/img_lineas/' + itemcat.linea.trim() +'/' + itemcat.linea.trim() + '.jpg';
               const ref = this.afStorage.ref(larchivo);
               ref.getDownloadURL().subscribe((url: any) =>  {
                 itemcat.link_img = url;
@@ -468,7 +469,19 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
             (err)=>{ console.log("Error en el data de Fb", err) }          
             );        
   }
-  
+  actualizar_linkimagenfb_unalinea(pcod_catalogo,plinea,pversion){
+    let larchivo = '/img_lineas/' + plinea.trim() +'/' + plinea.trim() + '.jpg';
+    const ref = this.afStorage.ref(larchivo);
+    ref.getDownloadURL().subscribe((url: any) =>  {
+      const datoact = {link_img : url};
+      console.log('Se actualiza imagen para linea: ' + pcod_catalogo.trim()+plinea.trim()+pversion.trim(), url);
+      this.fbDb.collection('armacatl').doc(pcod_catalogo.trim()+plinea.trim()+pversion.trim()).update(datoact);                
+      },
+      err =>{
+        console.log('No hay imagen para linea: ' + plinea);
+      });
+
+  }
   actualizar_linkimagenfb_lineacolor(){       
     this.fbDb.collection('armacatlcol').valueChanges()
       .subscribe((data) => 
@@ -476,7 +489,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
         console.log("DATA linea color a recoorer para act link imagen", data);
       //reccorrer y grabar en fb
       data.forEach((itemcat: any) => {
-        let larchivo = '/imagenes/' + itemcat.linea.trim()+' '+itemcat.color.trim() + '.jpg';
+        let larchivo =  '/img_lineas/'+ itemcat.linea.trim() +'/'  + itemcat.linea.trim()+' '+itemcat.color.trim() + '.jpg';
         const ref = this.afStorage.ref(larchivo);
         ref.getDownloadURL().subscribe((url: any) =>  {
           itemcat.link_img = url;
@@ -506,7 +519,7 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
       }else{
         //reccorrer y grabar en fb
         data.datos.forEach(itemcat => {
-          let larchivo = '/imagenes/' + itemcat.linea.trim()+' '+itemcat.color.trim()+'.jpg';
+          let larchivo = '/img_lineas/'  + itemcat.linea.trim()+ '/'+ itemcat.linea.trim()+' '+itemcat.color.trim()+'.jpg';
           const ref = this.afStorage.ref(larchivo);
           console.log('subir_colores: ', itemcat.color);
           ref.getDownloadURL().subscribe((url: any) =>  {
@@ -594,10 +607,6 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
   traerlinkimgagenfb(codigo) {
     const ref = this.afStorage.ref(`/imagenes/`+ codigo.trim());
     console.log('traerlinkimgagenfb ref a traer: ', 'imagenes/' + codigo.trim());
-    // const urlimg = ref.getDownloadURL();
-    // console.log('urlimg: ', urlimg);
-    // return ref.getDownloadURL();
-
     ref.getDownloadURL().subscribe((url: any) =>  {
       console.log('traerlinkimgagenfb suscribe de ref a traer: ', 'imagenes/' + codigo.trim(), url);
       console.log('traerlinkimgagenfb urlretorna: ', url);

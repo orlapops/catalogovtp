@@ -126,7 +126,7 @@ export class AppComponent  implements OnInit  {
     this._parEmpreProv.usuario_valido = false;
     this._parEmpreProv.permite_pedido = false;
     this._parEmpreProv.borrarUsuarioStorage();
-    this.navCtrl.navigateRoot('login');
+    this.navCtrl.navigateRoot('/login');
   }
   ir_historialped() {
     this.navCtrl.navigateRoot('historial');
