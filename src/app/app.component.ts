@@ -102,14 +102,22 @@ export class AppComponent  implements OnInit  {
                       }
                     });
                     console.log('Usuario: ',this._parEmpreProv.usuario);
+                    this._parEmpreProv.get_empresa(this._parEmpreProv.usuario.id_empresa).then( cargempre =>{
+                      if (cargempre){
                      //Verificar si ya esta autorizado por Via tropical Vista true
                      if (this._parEmpreProv.usuario.vista)
                        {
                           this.navCtrl.navigateRoot('/home');
                        } else {
                           //Esperando autorización
-                           this.navCtrl.navigateRoot('/wait');
-                       }
+                          this.navCtrl.navigateRoot('/wait');
+                        }
+                      } else {
+                          //Esperando autorización
+                          this.navCtrl.navigateRoot('/wait');
+                      }
+                    })
+
                 }
             });
         }else {

@@ -37,6 +37,7 @@ export class ParEmpreService {
   item: Observable<Item>;
   URL_SERVICIOS: string ="";
   idreglog = 'depuracion1';
+  datosEmpre: any;
 
   constructor(
     private afDB: AngularFirestore,
@@ -149,7 +150,28 @@ export class ParEmpreService {
 				.collection(`usuarios`)
 			 .doc(Id).valueChanges();
 			}
-
+      //Carga datos empresa con direcciones
+      get_empresa(nit) 
+      {
+       let promesa = new Promise((resolve,reject)=>{
+           this.afDB.doc(`/empresas/${nit}`)
+             .valueChanges().subscribe( data => {
+                 console.log('dato leiodo empresa ',data);
+                   if (data) {
+                     // correcto
+                     this.datosEmpre = data;
+                     resolve(true);
+                   } else{ 
+                     // incorrecto
+                     this.datosEmpre = null;
+                     resolve(false);
+                   }
+                   resolve();
+               })
+             });
+             return promesa;
+     }
+   
 //sERVICIOS COMO FUNCIONES DE LIBRERIA ADICIONALES A JS
 //COMPLETA UNA CADENA CON 0 A LA IZQUIERDA DE NUMERO Y LONGITUD DADA
 

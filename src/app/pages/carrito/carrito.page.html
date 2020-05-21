@@ -79,26 +79,59 @@
                 <hr color="tertiary">
             </ion-col>
         </ion-grid>
-
         <ion-row align-items-start>
             <ion-col size="4">
-                <h1 style="color:#d76d1f">
+                <h5 style="color:#d76d1f">
                     <strong>Total:</strong>
-                </h1>
+                </h5>
 
             </ion-col>
-            <hr>
+            <!-- <hr> -->
             <ion-col size="3">
-                <h1>
+                <h5>
                     <strong> {{_cs.total_pares }} </strong>
-                </h1>
+                </h5>
             </ion-col>
-            <ion-col align-items-start size="5">
+            <!-- <ion-col align-items-start size="5">
                 <ion-button class="position-relative" shape="round" color="primary" outline block small (click)="hacerPedido()">
                     Hacer Pedido
                 </ion-button>
-            </ion-col>
+            </ion-col> -->
         </ion-row>
         <hr>
+        <div *ngIf="!grabando_pedido && !mostrandoresulado">
+            <ion-row align-items-start>
+                <h6 class="nomempresa" > <strong>{{_parEmpreProv.datosEmpre.nombre}}</strong></h6>
+            </ion-row>
+            <ion-row align-items-start>
+                <ion-label color="dark">Local:</ion-label>
+            </ion-row>
+            <ion-row align-items-start>
+                <ion-select  placeholder="Seleccione un local" [(ngModel)]="direcdespa" (ionChange)="changedirec($event)"  
+                    interface="action-sheet" class="selectresumselec" okText="Ok" cancelText="Ok">
+                    <ion-label color="dark">'Aqui el label'</ion-label>
+                    <ion-select-option class="selectresumselecoption" 
+                     *ngFor="let local of _parEmpreProv.datosEmpre.direcciones" [value]="local.id_dir"><h6>{{local.direccion}}</h6></ion-select-option>
+                </ion-select>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label class="titulo">Notas:</ion-label>
+                    <ion-textarea style="background: whitesmoke" rows="2" cols="12" inputmode="text"
+                        placeholder="Registre las Notas" [(ngModel)]="notapedido" >
+                    </ion-textarea>
+                </ion-col>
+            </ion-row>
+
+            <!-- <ion-item>
+                <ion-label color="dark" position="stacked">Nota:</ion-label>
+                <ion-textarea rows="3" cols="12" inputmode="text" placeholder="Registre la Nota" [(ngModel)]="notaPed" [value]="notaPed"></ion-textarea>
+            </ion-item> -->
+
+            <ion-button *ngIf="!grabando_pedido && !mostrandoresulado" slot="end" shape="round" color="success" (click)="hacerPedido()">
+                Realizar Pedido
+            </ion-button>
+        </div>
+
     </div>
 </ion-content>

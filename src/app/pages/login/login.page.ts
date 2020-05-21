@@ -127,6 +127,8 @@ export class LoginPage implements OnInit {
                               this._parEmpreProv.permite_pedido = datos.Pedido;
                               this._parEmpreProv.guardarUsuarioStorage(datos);
                               console.log(this._parEmpreProv.usuario);
+                              this._parEmpreProv.get_empresa(this._parEmpreProv.usuario.id_empresa).then( cargempre =>{
+                                if (cargempre){
                               //Verificar si ya esta autorizado por Via tropical Vista true
                               if (this._parEmpreProv.usuario.vista)
                               {
@@ -135,6 +137,12 @@ export class LoginPage implements OnInit {
                                 //Esperando autorización
                                 this.navCtrl.navigateRoot('/wait');
                               }
+                                } else {
+                                //Esperando autorización
+                                this.navCtrl.navigateRoot('/wait');
+                                }
+                              });
+         
                               // this.cargaparametrosbasicos().then(() => {
                               //   resolve(true);
                               // });

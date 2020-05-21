@@ -16,6 +16,12 @@ export class CarritoPage implements OnInit {
   item_imagen: any; //Obtener la Imagen segun el Item
   color: any;
   imagen: any;
+  grabando_pedido = false;
+  grabo_pedido = false;
+  mostrandoresulado = false;
+  direcdespa:any;
+  menerror = '';
+  notapedido = '';
 
   constructor(public _ps: ProductosService,
     public _cs: CarritoService,
@@ -28,8 +34,29 @@ export class CarritoPage implements OnInit {
   ngOnInit() {
     console.log("this.items en Carrito Page:", this._cs, this._cs.items);
     console.log(this._cs.items.length);
+    //Traer direcciones de despacho y datos del cliente
+    console.log('this._parEmpreProv.datosEmpre',this._parEmpreProv.datosEmpre);
+    
+
   }
   async hacerPedido() {
+    console.log('hacerPedido direcdespa',this.direcdespa, this._parEmpreProv.datosEmpre.direcciones.length);
+    this.menerror = '';
+    if ((this.direcdespa ===undefined || this.direcdespa ==='') && this._parEmpreProv.datosEmpre.direcciones.length !== 0) {
+        console.error('Debe ingresar dirección de despacho');
+        this.menerror = 'Debe seleccionar un local o dirección de despacho';
+        const toast = await this.toastCtrl.create({
+          showCloseButton: true,
+          message: 'Debe seleccionar un local o dirección de despacho',
+          duration: 3000,
+          position: 'bottom'
+        });
+        toast.present();
+        return;
+    }
+    console.log('a Realizar pedido',this._parEmpreProv.datosEmpre.direcciones, this.direcdespa);
+    //buscar direccion y retornar el id
+    const direcfound = this._parEmpreProv.datosEmpre.direcciones.find(element => element.direccion === this.direcdespa);   
     const now = new Date();
     const hora = now.getHours();
     const minutos = now.getMinutes();
@@ -45,9 +72,12 @@ export class CarritoPage implements OnInit {
       fecha: Date(),
       hora_ped: parseInt(horaped),
       items: this._cs.items,
+      direccion: direcfound,
+      notas: this.notapedido,
       nomusuar_crea: this._parEmpreProv.usuario.Nombre,
       email: this._parEmpreProv.usuario.Email,
-      id_empresa: this._parEmpreProv.usuario.id_empresa
+      // id_empresa: this._parEmpreProv.usuario.id_empresa
+      id_empresa: this._parEmpreProv.datosEmpre.nit
     };
     console.log('a guardar fb ',this._parEmpreProv.usuario.id_empresa, idpedido.toString(), objpedidogfb);
     this._ps.guardarpedidoFb(this._parEmpreProv.usuario.id_empresa, idpedido.toString(), objpedidogfb)
@@ -73,6 +103,10 @@ export class CarritoPage implements OnInit {
         toast.present();
       });
 
+  }
+
+  changedirec(e) {
+    console.log("changedirec e: ", e);
   }
 
 }

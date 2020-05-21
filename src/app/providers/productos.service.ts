@@ -71,6 +71,8 @@ export class ProductosService {
 //SERVICIOS CON CONEXION A NETSOLIN Y FIREBASE JM 10/10/2018--------------------------------
 
   //Cargar todos los catalogos de Viatropical   
+
+  //Cargar todos los catalogos de Viatropical   
   cargar_lineas() 
    {
     return new Promise( (resolve, reject) => {
@@ -206,6 +208,13 @@ guardarpedidoFb(cod_tercer, id, objpedido) {
     }
   
   }
+
+//traer datos de la empresa y direcciones
+public get_datosempresa(id){
+  return this.fbDb
+  .collection(`/empresas`)
+  .doc(id).valueChanges();
+}
 
 //Traer un catalogo de fb 
   public get_catalogo(id){

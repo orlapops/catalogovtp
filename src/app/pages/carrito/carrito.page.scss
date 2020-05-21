@@ -1,3 +1,18 @@
+
+        .itemresum {
+            padding: initial;
+        }        
+        .selectresumselecoption{
+            min-width: 100px !important;
+            font-size: 11px !important;
+          }
+          .selectresumselec{
+            min-width: fit-auto !important;
+            // max-width: 100px;
+            // min-width: 100px;
+            font-size: 11px !important;
+          }
+        
 .tc_estilo
     {
     background-color: #ff9448;
@@ -81,3 +96,7 @@
         position: relative;
         top: -14px;
     }
+
+.nomempresa {
+    font-size: small;
+} 
